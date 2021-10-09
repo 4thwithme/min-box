@@ -23,3 +23,8 @@ https://ugatu.su/media/uploads/MainSite/Science/dissovet/03/2006/17.11/Valeeva_A
 
 https://www.ispras.ru/proceedings/docs/2018/30/4/isp_30_2018_4_209.pdf
 https://docplayer.com/45890309-M-v-lucan-e-v-nuzhnov-reshenie-zadachi-trehmernoy-upakovki-s-paletirovaniem-konteynerov.html
+
+npm and git shit
+
+https://www.npmjs.com/package/simple-bp3d-node
+https://www.npmjs.com/package/3d-bin-packing

@@ -76,7 +76,10 @@ export const getListOfBoxesFittedByItemsVolume: GetListOfBoxesFittedByVolume =
       const boxItem = boxes[boxId];
       const boxVolume = getItemVolume(boxItem);
       if (boxVolume > sumItemsVolume) {
-        console.log(`${((sumItemsVolume * 100) / boxVolume).toFixed(2)}%`);
+        console.log(
+          `${((sumItemsVolume * 100) / boxVolume).toFixed(2)}%`,
+          boxItem.label
+        );
 
         acc.push(boxId);
       }
@@ -106,3 +109,15 @@ export const getListOfBoxesFittedForHighestDimension: GetListOfBoxesFittedForHig
       return acc;
     }, []);
   };
+
+type GetFittedBoxesIds = (
+  listOfBoxesFittedByVolume: IBox["id"][],
+  listOfBoxesFittedForHighestDimension: IBox["id"][]
+) => IBox["id"][];
+export const getFittedBoxesIds: GetFittedBoxesIds = (
+  listOfBoxesFittedByVolume,
+  listOfBoxesFittedForHighestDimension
+) =>
+  listOfBoxesFittedByVolume.filter((id) =>
+    listOfBoxesFittedForHighestDimension.includes(id)
+  );
