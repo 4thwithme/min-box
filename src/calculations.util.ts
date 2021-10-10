@@ -10,12 +10,12 @@ export type IRectItemsList = { [key: string]: IRectItem };
 export type IBoxesList = { [key: string]: IBox };
 export type IGetMinBoxArgs = IWithItemsWithBoxes;
 
-interface IGetListOfBoxesFittedByMeasurements extends IWithItemsWithBoxes {
+interface IGetListOfProperBoxesByMeasurements extends IWithItemsWithBoxes {
   sortedBoxesIds: IBox["id"][];
   sortedItemsIds: IRectItem["id"][];
 }
 
-interface IGetListOfBoxesFittedForHighestDimensionArgs {
+interface IGetListOfProperBoxesForHighestDimensionArgs {
   sortedBoxesIds: IBox["id"][];
   boxes: IBoxesList;
   item: IRectItem;
@@ -63,10 +63,10 @@ export const getItemVolume: GetItemVolume = (item) => {
   return 0;
 };
 
-type GetListOfBoxesFittedByVolume = (
-  args: IGetListOfBoxesFittedByMeasurements
+type GetListOfProperBoxesByVolume = (
+  args: IGetListOfProperBoxesByMeasurements
 ) => IBox["id"][];
-export const getListOfBoxesFittedByItemsVolume: GetListOfBoxesFittedByVolume =
+export const getListOfProperBoxesByItemsVolume: GetListOfProperBoxesByVolume =
   ({ sortedBoxesIds, sortedItemsIds, items, boxes }) => {
     const sumItemsVolume = sum(
       sortedItemsIds.map((id) => getItemVolume(items[id]))
@@ -87,10 +87,10 @@ export const getListOfBoxesFittedByItemsVolume: GetListOfBoxesFittedByVolume =
     }, []);
   };
 
-type GetListOfBoxesFittedForHighestDimension = (
-  args: IGetListOfBoxesFittedForHighestDimensionArgs
+type GetListOfProperBoxesForHighestDimension = (
+  args: IGetListOfProperBoxesForHighestDimensionArgs
 ) => IBox["id"][];
-export const getListOfBoxesFittedForHighestDimension: GetListOfBoxesFittedForHighestDimension =
+export const getListOfProperBoxesForHighestDimension: GetListOfProperBoxesForHighestDimension =
   ({ sortedBoxesIds, item, boxes }) => {
     const highestDimension = getMaxDimensionWithGap(
       item.dimensions,
@@ -110,14 +110,14 @@ export const getListOfBoxesFittedForHighestDimension: GetListOfBoxesFittedForHig
     }, []);
   };
 
-type GetFittedBoxesIds = (
-  listOfBoxesFittedByVolume: IBox["id"][],
-  listOfBoxesFittedForHighestDimension: IBox["id"][]
+type GetProperBoxesIds = (
+  listOfProperBoxesByVolume: IBox["id"][],
+  listOfProperBoxesForHighestDimension: IBox["id"][]
 ) => IBox["id"][];
-export const getFittedBoxesIds: GetFittedBoxesIds = (
-  listOfBoxesFittedByVolume,
-  listOfBoxesFittedForHighestDimension
+export const getProperBoxesIds: GetProperBoxesIds = (
+  listOfProperBoxesByVolume,
+  listOfProperBoxesForHighestDimension
 ) =>
-  listOfBoxesFittedByVolume.filter((id) =>
-    listOfBoxesFittedForHighestDimension.includes(id)
+  listOfProperBoxesByVolume.filter((id) =>
+    listOfProperBoxesForHighestDimension.includes(id)
   );

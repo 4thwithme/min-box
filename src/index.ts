@@ -1,12 +1,12 @@
 import {
-  getFittedBoxesIds,
-  getListOfBoxesFittedByItemsVolume,
-  getListOfBoxesFittedForHighestDimension,
+  getProperBoxesIds,
+  getListOfProperBoxesByItemsVolume,
+  getListOfProperBoxesForHighestDimension,
   IGetMinBoxArgs,
   sortByNonIncreasingDimension,
   sortByNonIncreasingVolume,
 } from "./calculations.util";
-import { getMinFittedBox } from "./get-min-fitted-box";
+import { getMinProperBox } from "./get-min-fitted-box";
 import { IBox, makeBox, makeRectangularItem } from "./items.util";
 
 const BOX1 = makeBox({ x: 100, y: 150, z: 160 }, "S");
@@ -17,17 +17,17 @@ const BOX5 = makeBox({ x: 260, y: 300, z: 170 }, "XXL");
 //---------------------------------------------------------
 
 const RECT_ITEM1 = makeRectangularItem({ x: 20, y: 5, z: 55 }, 24);
-const RECT_ITEM1_2 = makeRectangularItem({ x: 20, y: 5, z: 55 }, 24);
-const RECT_ITEM1_3 = makeRectangularItem({ x: 20, y: 5, z: 55 }, 24);
-const RECT_ITEM2 = makeRectangularItem({ x: 5, y: 80, z: 10 }, 10);
-const RECT_ITEM3 = makeRectangularItem({ x: 100, y: 130, z: 10 }, 18);
-const RECT_ITEM3_2 = makeRectangularItem({ x: 100, y: 130, z: 10 }, 18);
-const RECT_ITEM3_3 = makeRectangularItem({ x: 100, y: 130, z: 10 }, 18);
-const RECT_ITEM3_4 = makeRectangularItem({ x: 100, y: 130, z: 10 }, 18);
-const RECT_ITEM4 = makeRectangularItem({ x: 160, y: 60, z: 60 }, 5);
-const RECT_ITEM5 = makeRectangularItem({ x: 10, y: 20, z: 120 }, 10);
-const RECT_ITEM5_2 = makeRectangularItem({ x: 10, y: 20, z: 120 }, 10);
-const RECT_ITEM5_3 = makeRectangularItem({ x: 10, y: 20, z: 120 }, 10);
+const RECT_ITEM2 = makeRectangularItem({ x: 20, y: 5, z: 55 }, 24);
+const RECT_ITEM3 = makeRectangularItem({ x: 20, y: 5, z: 55 }, 24);
+const RECT_ITEM4 = makeRectangularItem({ x: 5, y: 80, z: 10 }, 10);
+const RECT_ITEM5 = makeRectangularItem({ x: 100, y: 130, z: 10 }, 18);
+const RECT_ITEM6 = makeRectangularItem({ x: 100, y: 130, z: 10 }, 18);
+const RECT_ITEM7 = makeRectangularItem({ x: 100, y: 130, z: 10 }, 18);
+const RECT_ITEM8 = makeRectangularItem({ x: 100, y: 130, z: 10 }, 18);
+const RECT_ITEM9 = makeRectangularItem({ x: 160, y: 180, z: 180 }, 5);
+const RECT_ITEM10 = makeRectangularItem({ x: 10, y: 20, z: 120 }, 10);
+const RECT_ITEM11 = makeRectangularItem({ x: 10, y: 20, z: 120 }, 10);
+const RECT_ITEM12 = makeRectangularItem({ x: 10, y: 20, z: 120 }, 10);
 //---------------------------------------------------------
 
 type GetMinBox = (args: IGetMinBoxArgs) => IBox["label"] | null;
@@ -39,34 +39,34 @@ const getMinBox: GetMinBox = ({ items, boxes }) => {
   const sortedItemsIdsByVolume = sortByNonIncreasingVolume(items);
   const sortedItemsIdsByDimension = sortByNonIncreasingDimension(items);
   // check is this batch of items can be putted into some box
-  const listOfBoxesFittedByVolume = getListOfBoxesFittedByItemsVolume({
+  const listOfProperBoxesByVolume = getListOfProperBoxesByItemsVolume({
     sortedBoxesIds: sortedBoxesIdsByVolume,
     sortedItemsIds: sortedItemsIdsByVolume,
     items,
     boxes,
   });
 
-  const listOfBoxesFittedForHighestDimension =
-    getListOfBoxesFittedForHighestDimension({
+  const listOfProperBoxesForHighestDimension =
+    getListOfProperBoxesForHighestDimension({
       sortedBoxesIds: sortedBoxesIdsByVolume,
       item: items[sortedItemsIdsByDimension[0]],
       boxes,
     });
   // get list of boxes ids which can contain all items volume and dimensions
-  const fittedBoxesIds = getFittedBoxesIds(
-    listOfBoxesFittedByVolume,
-    listOfBoxesFittedForHighestDimension
+  const properBoxesIds = getProperBoxesIds(
+    listOfProperBoxesByVolume,
+    listOfProperBoxesForHighestDimension
   );
 
-  console.log("fittedBoxesIds", fittedBoxesIds);
+  console.log("properBoxesIds", properBoxesIds);
 
-  if (!fittedBoxesIds.length) {
+  if (!properBoxesIds.length) {
     return null;
   }
 
-  return getMinFittedBox({
+  return getMinProperBox({
     sortedItemsIdsByVolume,
-    fittedBoxesIds,
+    properBoxesIds,
     items,
     boxes,
   });
@@ -75,17 +75,17 @@ const getMinBox: GetMinBox = ({ items, boxes }) => {
 const res = getMinBox({
   items: {
     [RECT_ITEM1.id]: RECT_ITEM1,
-    [RECT_ITEM1_2.id]: RECT_ITEM1_2,
-    [RECT_ITEM1_3.id]: RECT_ITEM1_3,
     [RECT_ITEM2.id]: RECT_ITEM2,
     [RECT_ITEM3.id]: RECT_ITEM3,
-    [RECT_ITEM3_2.id]: RECT_ITEM3_2,
-    [RECT_ITEM3_3.id]: RECT_ITEM3_3,
-    [RECT_ITEM3_4.id]: RECT_ITEM3_4,
     [RECT_ITEM4.id]: RECT_ITEM4,
     [RECT_ITEM5.id]: RECT_ITEM5,
-    [RECT_ITEM5_2.id]: RECT_ITEM5_2,
-    [RECT_ITEM5_3.id]: RECT_ITEM5_3,
+    [RECT_ITEM6.id]: RECT_ITEM6,
+    [RECT_ITEM7.id]: RECT_ITEM7,
+    [RECT_ITEM8.id]: RECT_ITEM8,
+    [RECT_ITEM9.id]: RECT_ITEM9,
+    [RECT_ITEM10.id]: RECT_ITEM10,
+    [RECT_ITEM11.id]: RECT_ITEM11,
+    [RECT_ITEM12.id]: RECT_ITEM12,
   },
   boxes: {
     [BOX1.id]: BOX1,
@@ -96,4 +96,4 @@ const res = getMinBox({
   },
 });
 
-console.log(res);
+console.log("RESULT---------> Box with label = ", res);

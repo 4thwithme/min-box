@@ -9,15 +9,15 @@ import { IBox, IRectItem } from "./items.util";
 
 interface IArgs {
   sortedItemsIdsByVolume: IRectItem["id"][];
-  fittedBoxesIds: IBox["id"][];
+  properBoxesIds: IBox["id"][];
   items: IRectItemsList;
   boxes: IBoxesList;
 }
 
-type GetMinFittedBox = (args: IArgs) => IBox["label"];
-export const getMinFittedBox: GetMinFittedBox = ({
+type GetMinProperBox = (args: IArgs) => IBox["label"];
+export const getMinProperBox: GetMinProperBox = ({
   sortedItemsIdsByVolume,
-  fittedBoxesIds,
+  properBoxesIds,
   boxes,
   items,
 }) => {
@@ -28,7 +28,7 @@ export const getMinFittedBox: GetMinFittedBox = ({
 
     instanceArray.insert(
       instanceArray.end(),
-      20,
+      1,
       new packer.Product(
         item.id,
         item.dimensions.x,
@@ -38,7 +38,7 @@ export const getMinFittedBox: GetMinFittedBox = ({
     );
   });
 
-  const boxesWhichCanAccommodateAllItems = fittedBoxesIds.reduce<IBoxesList>(
+  const boxesWhichCanAccommodateAllItems = properBoxesIds.reduce<IBoxesList>(
     (acc, boxId) => {
       const boxItem = boxes[boxId];
       let wrapperArray = new packer.WrapperArray();
